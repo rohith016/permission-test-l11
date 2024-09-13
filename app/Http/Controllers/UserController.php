@@ -13,14 +13,15 @@ class UserController extends Controller
      * @param UserService $service
      */
     public function __construct(public readonly UserService $service){}
-    /**
-     * getRequest function
-     *
-     * @param Request $request
-     * @return array
-     */
-    public function getRequest(Request $request) : array
-    {
-        return $this -> service -> getRequest();
+
+
+    public function index(Request $request){
+        $users = $this -> service -> getUsers($request -> search);
+        return view('user.index', compact('users'));
+    }
+
+    public function show($id){
+        $user = $this -> service -> getUser($id);
+        return view('user.show', compact('user'));
     }
 }

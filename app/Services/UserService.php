@@ -2,19 +2,29 @@
 
 namespace App\Services;
 
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 class UserService
 {
     /**
-     * getRequest function
+     * getUsers function
      *
-     * @return array
+     * @param [type] $key
+     * @return User
      */
-    public function getRequest() : array
-    {
-        return [
-            "status" => 200,
-            "message" => "Data recieved at controller and return from service class",
-            "data" => [],
-        ];
+    public function getUsers($key = null): LengthAwarePaginator {
+        return User::query()
+            ->when($key, function($query) use($key){
+                $query -> orWhere('name', 'like', "%$key%");
+                $query -> orWhere('email', 'like', "%$key%");
+            })
+            ->oldest()
+            ->paginate(10);
+    }
+
+    public function getUser($id) : User {
+        return User::find($id);
     }
 }
