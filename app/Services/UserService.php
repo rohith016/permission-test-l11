@@ -23,7 +23,12 @@ class UserService
             ->oldest()
             ->paginate(10);
     }
-
+    /**
+     * getUser function
+     *
+     * @param [type] $id
+     * @return User
+     */
     public function getUser($id) : User {
         return User::find($id);
     }
