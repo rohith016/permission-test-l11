@@ -15,11 +15,13 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    {{-- @role(\App\Enum\RoleEnum::ADMIN) --}}
+                    @can('manage_users')
                     <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.*')">
                         {{ __('Users') }}
                     </x-nav-link>
+                    @endcan
+                    {{-- @endrole --}}
                 </div>
             </div>
 
@@ -75,6 +77,13 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            {{-- @role(App\Enum\RoleEnum::ADMIN) --}}
+            @can('manage_users')
+            <x-responsive-nav-link :href="route('user.index')" :active="request()->routeIs('user.*')">
+                {{ __('Users') }}
+            </x-responsive-nav-link>
+            @endcan
+            {{-- @endrole --}}
         </div>
 
         <!-- Responsive Settings Options -->
