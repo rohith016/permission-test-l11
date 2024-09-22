@@ -49,5 +49,6 @@
         - routes\web.php
         - resources\views\layouts\navigation.blade.php
         - php artisan make:seeder PermissionSeeder 
+        - php artisan db:seed --class=PermissionSeeder
 
     
