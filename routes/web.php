@@ -20,10 +20,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 
+
+    Route::resource('/users', UserController::class)->middleware('can:manage_users');
     // Route::get('/user', [UserController::class, 'index'])->name('user.index')->middleware(['role:'.RoleEnum::ADMIN->value]);
-    Route::get('/user', [UserController::class, 'index'])->name('user.index')->middleware('can:manage_users');
+    // Route::get('/user', [UserController::class, 'index'])->name('user.index')->middleware('can:manage_users');
     // Route::get('/user/{id}', [UserController::class, 'show'])->name('user.show')->middleware(['role:'. RoleEnum::ADMIN->value]);
-    Route::get('/user/{id}', [UserController::class, 'show'])->name('user.show')->middleware('can:manage_users');
+    // Route::get('/user/{id}', [UserController::class, 'show'])->name('user.show')->middleware('can:manage_users');
 });
 
 require __DIR__.'/auth.php';

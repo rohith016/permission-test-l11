@@ -20,7 +20,7 @@ class UserService
                 $query -> orWhere('name', 'like', "%$key%");
                 $query -> orWhere('email', 'like', "%$key%");
             })
-            ->oldest()
+            ->latest()
             ->paginate(10);
     }
     /**
@@ -31,5 +31,45 @@ class UserService
      */
     public function getUser($id) : User {
         return User::find($id);
+    }
+    /**
+     * saveUser function
+     *
+     * @param [type] $userRequestData
+     * @return void
+     */
+    public function saveUser($userRequestData){
+        try {
+            return User::create($userRequestData);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+    /**
+     * updateUser function
+     *
+     * @param [type] $userRequestData
+     * @param User $user
+     * @return void
+     */
+    public function updateUser($userRequestData, User $user){
+        try {
+            return $user -> update($userRequestData);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+    /**
+     * deleteUser function
+     *
+     * @param User $user
+     * @return void
+     */
+    public function deleteUser(User $user){
+        try {
+            return $user -> delete();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

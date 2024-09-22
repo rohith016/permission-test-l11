@@ -15,7 +15,10 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        /**
+         * this model is imported from the spatie library
+         * this will come from the migration file on the spatie
+         */
         Permission::create(['name' => "manage_users"]);
 
         $role = Role::findByName(RoleEnum::ADMIN->value);

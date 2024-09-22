@@ -9,16 +9,17 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-
-
-                    <form action="{{route('user.index')}}" method="get">
+                    <form
+                        action="{{route('users.index')}}"
+                        method="get">
                         <input type="text" name="search" class="block mt-1 w-full" id="search" value="{{request()->query('search')}}" />
                         <button type="submit" class="btn btn-warning">Search</button>
-                        <a href="{{route('user.index')}}" class="btn btn-link">Clear</a>
+                        <a href="{{route('users.index')}}" class="btn btn-link">Clear</a>
                     </form>
 
+                    <a href="{{route('users.create')}}" class="btn btn-link">Create User</a>
 
-                    <table class="table">
+                    <table class="table mt-4">
                         <tr>
                             <th>#</th>
                             <th>Name</th>
@@ -27,12 +28,22 @@
                         </tr>
                         @foreach ($users as $user)
                         <tr>
-                            <td>{{ $user -> id}}</td>
+                            <td>{{ $loop -> iteration }}</td>
                             <td>{{ $user -> name}}</td>
                             <td>{{ $user -> email}}</td>
                             <td>
-                                <a href="{{ route('user.show', $user -> id) }}" class="btn btn-primary">Edit</a>
-                                <button class="btn btn-danger">Delete</button>
+                                <a href="{{ route('users.edit', $user) }}" class="underline">Edit</a>
+                                |
+                                <form action="{{ route('users.destroy', $user)}}"
+                                    method="post"
+                                    class="inline"
+                                    onsubmit="return confirm('Are you sure?')">
+                                    @csrf
+                                    @method("delete")
+                                    <button  type="submit" class="text-red-500 underline">Delete</button>
+
+                                </form>
+
                             </td>
                         </tr>
                         @endforeach

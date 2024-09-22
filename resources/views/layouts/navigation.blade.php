@@ -17,7 +17,7 @@
                     </x-nav-link>
                     {{-- @role(\App\Enum\RoleEnum::ADMIN) --}}
                     @can('manage_users')
-                    <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.*')">
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
                         {{ __('Users') }}
                     </x-nav-link>
                     @endcan
@@ -79,7 +79,7 @@
             </x-responsive-nav-link>
             {{-- @role(App\Enum\RoleEnum::ADMIN) --}}
             @can('manage_users')
-            <x-responsive-nav-link :href="route('user.index')" :active="request()->routeIs('user.*')">
+            <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
                 {{ __('Users') }}
             </x-responsive-nav-link>
             @endcan
