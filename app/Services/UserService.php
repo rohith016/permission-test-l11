@@ -11,14 +11,17 @@ class UserService
     /**
      * getUsers function
      *
-     * @param [type] $key
-     * @return User
+     * @param string|null $search
+     * @return LengthAwarePaginator
      */
-    public function getUsers($key = null): LengthAwarePaginator {
+    public function getUsers(?string $search = null): LengthAwarePaginator
+    {
         return User::query()
-            ->when($key, function($query) use($key){
-                $query -> orWhere('name', 'like', "%$key%");
-                $query -> orWhere('email', 'like', "%$key%");
+            ->when($search, function ($query) use ($search) {
+                $query->whereAny([
+                    'name',
+                    'email'
+                ], 'like', "%{$search}%");
             })
             ->latest()
             ->paginate(10);

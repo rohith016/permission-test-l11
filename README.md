@@ -51,4 +51,12 @@
         - php artisan make:seeder PermissionSeeder 
         - php artisan db:seed --class=PermissionSeeder
 
+
+# Test Case
+
+## write Pest Test case
+
+- php artisan make:test UserTest
+- php artisan test --filter UserTest [run specified test]
+
     
