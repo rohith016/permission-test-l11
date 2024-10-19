@@ -2,9 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
-    UserController, ProfileController
+    UserController, ProfileController, PaymentController
 };
 use App\Enum\RoleEnum;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,5 +28,8 @@ Route::middleware('auth')->group(function () {
     // Route::get('/user/{id}', [UserController::class, 'show'])->name('user.show')->middleware(['role:'. RoleEnum::ADMIN->value]);
     // Route::get('/user/{id}', [UserController::class, 'show'])->name('user.show')->middleware('can:manage_users');
 });
+
+Route::get('test-pay', [PaymentController::class, 'store']);
+
 
 require __DIR__.'/auth.php';
