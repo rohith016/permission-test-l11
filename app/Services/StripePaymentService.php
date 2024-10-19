@@ -7,6 +7,19 @@ use App\Interfaces\PaymentGatewayInterface;
 class StripePaymentService implements PaymentGatewayInterface
 {
     /**
+     * __construct function
+     *
+     * @param string $apiUrl
+     * @param string $currency
+     */
+    public function __construct(
+        private string $apiUrl = '',
+        private string $currency = '',
+    ) {
+        $this->apiUrl = config('payment.gateways.stripe.api_url');
+        $this->currency = config('payment.gateways.stripe.currency');
+    }
+    /**
      * pay function
      *
      * @param float $amount
@@ -14,16 +27,16 @@ class StripePaymentService implements PaymentGatewayInterface
      */
     public function pay(float $amount): bool
     {
-        dd(2);
+        dd('called stripe service class', $this->apiUrl, $this->currency);
         if(!$amount || $amount <= 0)
             throw new Exception("Amount must be greater than 0", 1);
 
         $transactionId = null;
 
         // call stripe api to pay amount
-        $stripeResponse = Http::post('https://api.stripe.com/v1/charges', [
+        $stripeResponse = Http::post($this->apiUrl . '/charges', [
             'amount' => $amount,
-            'currency' => 'usd',
+            'currency' => $this->currency,
             'source' => 'tok_visa',
             'description' => 'Test payment',
         ]);
@@ -53,7 +66,7 @@ class StripePaymentService implements PaymentGatewayInterface
             throw new Exception("Invalid Transaction Id", $transactionId);
 
         // call stripe api to refund amount
-        $stripeResponse = Http::post('https://api.stripe.com/v1/refunds', [
+        $stripeResponse = Http::post($this->apiUrl . '/refunds', [
             'charge' => $transactionId,
             'amount' => $amount,
         ]);

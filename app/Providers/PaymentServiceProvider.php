@@ -14,10 +14,12 @@ class PaymentServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        if(env('PAY_GATEWAY') == 'PAYPAL'){
+        if(config('payment.default') == 'paypal'){
             $this->app->bind(PaymentGatewayInterface::class, PaypalPaymentService::class);
-        } else if (env('PAY_GATEWAY') == 'STRIPE') {
+        } else if (config('payment.default') == 'stripe') {
             $this->app->bind(PaymentGatewayInterface::class, StripePaymentService::class);
+        } else {
+            $this->app->bind(PaymentGatewayInterface::class, config('payment.default_class'));
         }
         // register payment interface here
         // $this->app->bind(PaymentGatewayInterface::class, StripePaymentService::class);

@@ -7,6 +7,19 @@ use App\Interfaces\PaymentGatewayInterface;
 class PaypalPaymentService implements PaymentGatewayInterface
 {
     /**
+     * __construct function
+     *
+     * @param string $apiUrl
+     * @param string $currency
+     */
+    public function __construct(
+        private  string $apiUrl = '',
+        private  string $currency = '',
+    ) {
+        $this->apiUrl = config('payment.gateways.paypal.api_url');
+        $this->currency = config('payment.gateways.paypal.currency');
+    }
+    /**
      * pay function
      *
      * @param float $amount
@@ -14,17 +27,17 @@ class PaypalPaymentService implements PaymentGatewayInterface
      */
     public function pay(float $amount): bool
     {
-        dd('called paypal service class');
+        dd('called paypal service class', $this->apiUrl, $this->currency);
         if(!$amount || $amount <= 0)
             throw new Exception("Amount must be greater than 0", 1);
 
         $transactionId = null;
 
         // call paypal api to pay amount
-        $paypalResponse = Http::post('https://api.paypal.com/v1/payments/sale', [
+        $paypalResponse = Http::post($this -> apiUrl . '/payments/sale', [
             'amount' => [
                 'total' => $amount,
-                'currency' => 'USD',
+                'currency' => $this -> currency,
             ],
             'description' => 'Test payment',
         ]);
@@ -52,10 +65,10 @@ class PaypalPaymentService implements PaymentGatewayInterface
             throw new Exception("Invalid Transaction Id", $transactionId);
 
         // call paypal api to refund amount
-        $paypalResponse = Http::post('https://api.paypal.com/v1/payments/sale/' . $transactionId . '/refund', [
+        $paypalResponse = Http::post($this -> apiUrl . $transactionId . '/refund', [
             'amount' => [
                 'total' => $amount,
-                'currency' => 'USD',
+                'currency' => $this -> currency,
             ],
         ]);
 
