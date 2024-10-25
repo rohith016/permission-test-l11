@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Exception;
+use Illuminate\Support\Facades\Http;
 use App\Interfaces\PaymentGatewayInterface;
 
 class StripePaymentService implements PaymentGatewayInterface
@@ -76,5 +78,32 @@ class StripePaymentService implements PaymentGatewayInterface
         else
             throw new Exception($stripeResponse->json('message'), $stripeResponse->json('error'));
 
+    }
+    /**
+     * generateToken function
+     *
+     * sample function to generate token
+     *
+     * @param [type] $cardNumber
+     * @param [type] $expMonth
+     * @param [type] $expYear
+     * @param [type] $cvc
+     * @return string
+     */
+    public function generateToken($cardNumber, $expMonth, $expYear, $cvc): string
+    {
+        $stripeResponse = Http::post( $this->apiUrl . '/tokens', [
+            'card' => [
+                'number' => $cardNumber,
+                'exp_month' => $expMonth,
+                'exp_year' => $expYear,
+                'cvc' => $cvc,
+            ],
+        ]);
+
+        if($stripeResponse->successful())
+            return $stripeResponse->json('id');
+        else
+            throw new Exception($stripeResponse->json('message'), $stripeResponse->json('error'));
     }
 }

@@ -79,4 +79,27 @@ class PaypalPaymentService implements PaymentGatewayInterface
 
 
     }
+    /**
+     * generateToken function
+     *
+     * generate token function
+     *
+     * @param [type] $cardNumber
+     * @param [type] $expMonth
+     * @param [type] $expYear
+     * @param [type] $cvc
+     * @return string
+     */
+    public function generateToken($cardNumber, $expMonth, $expYear, $cvc): string
+    {
+        // call paypal api to generate token
+        $paypalResponse = Http::post($this -> apiUrl. '/oauth2/token', [
+            'grant_type' => 'client_credentials',
+        ]);
+
+        if($paypalResponse->successful())
+            return $paypalResponse->json('access_token');
+        else
+            throw new Exception($paypalResponse->json('message'), $paypalResponse->json('error'));
+    }
 }
