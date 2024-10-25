@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Exceptions\PaymentException;
+use Illuminate\Support\Facades\Http;
 use App\Interfaces\PaymentGatewayInterface;
 
 class PaypalPaymentService implements PaymentGatewayInterface
@@ -29,7 +31,7 @@ class PaypalPaymentService implements PaymentGatewayInterface
     {
         dd('called paypal service class', $this->apiUrl, $this->currency);
         if(!$amount || $amount <= 0)
-            throw new Exception("Amount must be greater than 0", 1);
+            throw new PaymentException("Amount must be greater than 0");
 
         $transactionId = null;
 
@@ -45,7 +47,7 @@ class PaypalPaymentService implements PaymentGatewayInterface
         if($paypalResponse->successful())
             $transactionId = $paypalResponse->json('id');
         else
-            throw new Exception($paypalResponse->json('message'), $paypalResponse->json('error'));
+            throw new PaymentException($paypalResponse->json('message'));
 
         return $transactionId;
     }
@@ -59,10 +61,10 @@ class PaypalPaymentService implements PaymentGatewayInterface
     public function refund(int $transactionId, float $amount): bool
     {
         if(!$amount || $amount <= 0)
-            throw new Exception("Invalid amount or amount must be greater than 0", $amount);
+            throw new PaymentException("Invalid amount or amount must be greater than 0");
 
         if(!$transactionId)
-            throw new Exception("Invalid Transaction Id", $transactionId);
+            throw new PaymentException("Invalid Transaction Id");
 
         // call paypal api to refund amount
         $paypalResponse = Http::post($this -> apiUrl . $transactionId . '/refund', [
@@ -75,7 +77,7 @@ class PaypalPaymentService implements PaymentGatewayInterface
         if($paypalResponse->successful())
             return true;
         else
-            throw new Exception($paypalResponse->json('message'), $paypalResponse->json('error'));
+            throw new PaymentException($paypalResponse->json('message') ?? "Error on refund");
 
 
     }
@@ -100,6 +102,6 @@ class PaypalPaymentService implements PaymentGatewayInterface
         if($paypalResponse->successful())
             return $paypalResponse->json('access_token');
         else
-            throw new Exception($paypalResponse->json('message'), $paypalResponse->json('error'));
+            throw new PaymentException($paypalResponse->json('message') ?? "Payment gateway error");
     }
 }

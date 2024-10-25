@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use Exception;
+use App\Exceptions\PaymentException;
 use Illuminate\Support\Facades\Http;
 use App\Interfaces\PaymentGatewayInterface;
 
@@ -29,9 +29,11 @@ class StripePaymentService implements PaymentGatewayInterface
      */
     public function pay(float $amount): bool
     {
+        throw new PaymentException("Amount must be greater than 0", 400);
         dd('called stripe service class', $this->apiUrl, $this->currency);
+        // check if the amount is valid
         if(!$amount || $amount <= 0)
-            throw new Exception("Amount must be greater than 0", 1);
+            throw new PaymentException("Amount must be greater than 0", 400);
 
         $transactionId = null;
 
@@ -42,30 +44,32 @@ class StripePaymentService implements PaymentGatewayInterface
             'source' => 'tok_visa',
             'description' => 'Test payment',
         ]);
-
+        // return true if the response is successful else throw exception
         if($stripeResponse->successful())
             $transactionId = $stripeResponse->json('id');
         else
-            throw new Exception($stripeResponse->json('message'), $stripeResponse->json('error'));
+            throw new PaymentException($stripeResponse->json('message'), 400);
 
 
 
         return $transactionId;
     }
-    /**
-     * refund function
-     *
-     * @param integer $transactionId
-     * @param float $amount
-     * @return boolean
-     */
+   /**
+    * transactionId function
+    *
+    * @param integer $transactionId
+    * @param float $amount
+    * @return boolean
+    */
     public function refund(int $transactionId, float $amount): bool
     {
+        // check if the amount is valid
         if(!$amount || $amount <= 0)
-            throw new Exception("Invalid amount or amount must be greater than 0", $amount);
+            throw new PaymentException("Invalid amount or amount must be greater than 0");
 
+        // check if the transaction id is valid
         if(!$transactionId)
-            throw new Exception("Invalid Transaction Id", $transactionId);
+            throw new PaymentException("Invalid Transaction Id");
 
         // call stripe api to refund amount
         $stripeResponse = Http::post($this->apiUrl . '/refunds', [
@@ -73,10 +77,11 @@ class StripePaymentService implements PaymentGatewayInterface
             'amount' => $amount,
         ]);
 
+        // return true if the response is successful else throw exception
         if($stripeResponse->successful())
             return true;
         else
-            throw new Exception($stripeResponse->json('message'), $stripeResponse->json('error'));
+            throw new PaymentException($stripeResponse->json('message') ?? "Error on refund", 400);
 
     }
     /**
@@ -92,6 +97,7 @@ class StripePaymentService implements PaymentGatewayInterface
      */
     public function generateToken($cardNumber, $expMonth, $expYear, $cvc): string
     {
+        // stripe api call to generate token
         $stripeResponse = Http::post( $this->apiUrl . '/tokens', [
             'card' => [
                 'number' => $cardNumber,
@@ -100,10 +106,12 @@ class StripePaymentService implements PaymentGatewayInterface
                 'cvc' => $cvc,
             ],
         ]);
-
+        // return token if the response is successful else throw exception
         if($stripeResponse->successful())
             return $stripeResponse->json('id');
         else
-            throw new Exception($stripeResponse->json('message'), $stripeResponse->json('error'));
+            throw new PaymentException(
+                $stripeResponse->json('message') ?? "Error on generate toke"
+            );
     }
 }

@@ -13,8 +13,19 @@ class PaymentController extends Controller
     }
 
     public function store(Request $request){
-        $res = $this -> service -> customerPayCharge();
-        dd($res);
+        try {
+            $res = $this -> service -> customerPayCharge();
+            dd($res);
+            //code...
+        } catch (\App\Exceptions\PaymentException $e) {
+            // throw $e;
+            return $e -> getMessage() . ' error here on PaymentException';
+            // return back()->withError($e -> getMessage());
+        } catch (\Throwable $th) {
+            // throw $th;
+            return $th -> getMessage() . ' error here on Throwable';
+            // return back()->withError($th -> getMessage());
+        }
 
     }
 }
