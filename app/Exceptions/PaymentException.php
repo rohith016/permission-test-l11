@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Log;
 use Exception;
 
 class PaymentException extends Exception
@@ -18,7 +19,7 @@ class PaymentException extends Exception
     public function report()
     {
         // Log the exception or perform custom reporting
-        \Log::error("PaymentException: {$this->message}");
+        Log::error("PaymentException: {$this->message}");
     }
 
     // public function render($request)

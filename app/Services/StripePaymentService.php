@@ -27,15 +27,11 @@ class StripePaymentService implements PaymentGatewayInterface
      * @param float $amount
      * @return boolean
      */
-    public function pay(float $amount): bool
+    public function pay(float $amount): string
     {
-        throw new PaymentException("Amount must be greater than 0", 400);
-        dd('called stripe service class', $this->apiUrl, $this->currency);
         // check if the amount is valid
         if(!$amount || $amount <= 0)
-            throw new PaymentException("Amount must be greater than 0", 400);
-
-        $transactionId = null;
+            throw new PaymentException("Amount must be greater than 0");
 
         // call stripe api to pay amount
         $stripeResponse = Http::post($this->apiUrl . '/charges', [
@@ -44,15 +40,13 @@ class StripePaymentService implements PaymentGatewayInterface
             'source' => 'tok_visa',
             'description' => 'Test payment',
         ]);
+
         // return true if the response is successful else throw exception
         if($stripeResponse->successful())
-            $transactionId = $stripeResponse->json('id');
+            return $stripeResponse->json('id') ?? null;
         else
-            throw new PaymentException($stripeResponse->json('message'), 400);
+            throw new PaymentException($stripeResponse->json('error')['message'] ?? "Error");
 
-
-
-        return $transactionId;
     }
    /**
     * transactionId function
@@ -81,7 +75,7 @@ class StripePaymentService implements PaymentGatewayInterface
         if($stripeResponse->successful())
             return true;
         else
-            throw new PaymentException($stripeResponse->json('message') ?? "Error on refund", 400);
+            throw new PaymentException($stripeResponse->json('message') ?? "Error on refund");
 
     }
     /**

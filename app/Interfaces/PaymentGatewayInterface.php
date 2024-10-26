@@ -10,7 +10,7 @@ interface PaymentGatewayInterface
      * @param float $amount
      * @return boolean
      */
-    public function pay(float $amount): bool;
+    public function pay(float $amount): string;
     /**
      * refund function
      *
@@ -18,7 +18,7 @@ interface PaymentGatewayInterface
      * @param float $amount
      * @return boolean
      */
-    public function refund(int $transactionId, float $amount): bool;
+    public function refund(int $transactionId, float $amount): bool | string;
     /**
      * generateToken function
      *

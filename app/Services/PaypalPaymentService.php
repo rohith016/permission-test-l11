@@ -27,7 +27,7 @@ class PaypalPaymentService implements PaymentGatewayInterface
      * @param float $amount
      * @return boolean
      */
-    public function pay(float $amount): bool
+    public function pay(float $amount): string
     {
         dd('called paypal service class', $this->apiUrl, $this->currency);
         if(!$amount || $amount <= 0)

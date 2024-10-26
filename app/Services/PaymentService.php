@@ -7,15 +7,19 @@ use App\Interfaces\PaymentGatewayInterface;
 class PaymentService
 {
     /**
-     * Create a new class instance.
+     * __construct function
+     *
+     * @param PaymentGatewayInterface $paymentGateway
      */
     public function __construct(public readonly PaymentGatewayInterface $paymentGateway){}
-
-
+    /**
+     * customerPayCharge function
+     *
+     * @param integer $amount
+     * @return boolean
+     */
     public function customerPayCharge(float $amount = 100): bool
     {
-        $data =  $this->paymentGateway->pay($amount);
-
-        dd($data);
+        $res =  $this->paymentGateway->pay($amount);
     }
 }
