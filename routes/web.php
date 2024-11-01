@@ -2,7 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
-    UserController, ProfileController, PaymentController
+    UserController,
+    ProfileController,
+    PaymentController,
+    ProductController
 };
 use App\Enum\RoleEnum;
 
@@ -23,6 +26,8 @@ Route::middleware('auth')->group(function () {
 
 
     Route::resource('/users', UserController::class)->middleware('can:manage_users');
+
+    Route::resource('/products', ProductController::class);
     // Route::get('/user', [UserController::class, 'index'])->name('user.index')->middleware(['role:'.RoleEnum::ADMIN->value]);
     // Route::get('/user', [UserController::class, 'index'])->name('user.index')->middleware('can:manage_users');
     // Route::get('/user/{id}', [UserController::class, 'show'])->name('user.show')->middleware(['role:'. RoleEnum::ADMIN->value]);
@@ -30,6 +35,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('test-pay', [PaymentController::class, 'store']);
+
 
 
 require __DIR__.'/auth.php';

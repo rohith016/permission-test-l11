@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7f841de7d9e33bed106aa8c620dea89",
+    "content-hash": "6191c7857bf59394c4bfe439efbb4ffb",
     "packages": [
         {
             "name": "brick/math",
@@ -7726,6 +7726,41 @@
             "time": "2024-09-09T06:08:34+00:00"
         },
         {
+            "name": "rohith016/e-commerce-stock-models",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rohith016/e-commerce-stock-models.git",
+                "reference": "1f25c0f2365c6d828615bf53a17386a9589126b1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rohith016/e-commerce-stock-models/zipball/1f25c0f2365c6d828615bf53a17386a9589126b1",
+                "reference": "1f25c0f2365c6d828615bf53a17386a9589126b1",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Rohith\\EcommercePackage\\EcommerceServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Rohith\\EcommercePackage\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "support": {
+                "issues": "https://github.com/rohith016/e-commerce-stock-models/issues",
+                "source": "https://github.com/rohith016/e-commerce-stock-models/tree/main"
+            },
+            "time": "2024-11-01T06:45:16+00:00"
+        },
+        {
             "name": "sebastian/cli-parser",
             "version": "3.0.2",
             "source": {
@@ -8831,7 +8866,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "rohith016/e-commerce-stock-models": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
