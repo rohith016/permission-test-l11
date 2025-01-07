@@ -58,6 +58,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('test-pay', [PaymentController::class, 'store']);
 Route::get('user-notification', [NotificationController::class, 'index']);
+Route::get('notification-test', [NotificationController::class, 'test']);
 
 
 

@@ -4,9 +4,19 @@ namespace App;
 
 use App\Models\Notification;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait Notifiables
 {
+    /**
+     * Define the relationship to the notifications table.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function notificationsRelation(): MorphMany
+    {
+        return $this->morphMany(Notification::class, 'notifiable');
+    }
     /**
      * Get all notifications for the model.
      *
@@ -35,13 +45,5 @@ trait Notifiables
         $this->notificationsRelation()->whereNull('read_at')->update(['read_at' => now()]);
     }
 
-    /**
-     * Define the relationship to the notifications table.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function notificationsRelation()
-    {
-        return $this->morphMany(Notification::class, 'notifiable');
-    }
+
 }
