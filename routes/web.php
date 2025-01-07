@@ -5,9 +5,31 @@ use App\Http\Controllers\{
     UserController,
     ProfileController,
     PaymentController,
-    ProductController
+    ProductController,
+    NotificationController
 };
 use App\Enum\RoleEnum;
+
+use App\Notifications\{
+    Notification,
+    SMSData,
+    EmailChannel,
+    SMSChannel,
+    EmailData
+};
+
+
+
+Route::get('/check', function () {
+
+    $result = Notification::channel(new EmailChannel())
+            ->send(new EmailData('John Doe', 'john.doe@mail.com', '+9188888888'));
+
+    dd($result);
+
+
+});
+
 
 
 Route::get('/', function () {
@@ -35,6 +57,10 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('test-pay', [PaymentController::class, 'store']);
+Route::get('user-notification', [NotificationController::class, 'index']);
+
+
+
 
 
 
